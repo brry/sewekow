@@ -9,6 +9,7 @@ if(!exists("shp")){
 message("Reading data...")
 shp <- sf::st_read("ALKIS_Shape_OPR/flurstueck.shp")
 }
+message("Cropping data...")
 lims <- c(xmin=339400, ymin=5897700, xmax=350500, ymax=5904000)
 shp2 <- sf::st_crop(shp, lims) ; rm(lims)
 message("Projecting data...")
@@ -20,9 +21,9 @@ popup <- unname(berryFunctions::popleaf(shp2, sel=c("gemarkung", "flur", "flurst
   
 message("Creating map...")
 # create map, add controls:
-rmap <- leaflet() %>% addPolygons(data=shp2, popup=popup, group="Flaechen", fill=FALSE) %>% #, 
-        #  label=~flurstnr, labelOptions = labelOptions(noHide=T, textOnly=T, minZoom=13)) %>% 
-  addLabelOnlyMarkers(data=cent, label=~flurstnr, labelOptions=labelOptions(noHide=T, textOnly=T) ) %>% 
+rmap <- leaflet() %>% addPolygons(data=shp2, popup=popup, group="Flaechen", fillOpacity=0, weight=1, 
+        label=~flurstnr, labelOptions=labelOptions(noHide=T, textOnly=T)) %>% 
+  #addLabelOnlyMarkers(data=cent, label=~flurstnr, labelOptions=labelOptions(noHide=T, textOnly=T) ) %>% 
   addSearchOSM(options=searchOptions(autoCollapse=TRUE, minLength=2, hideMarkerOnCollapse=TRUE, zoom=16)) %>% 
   addControlGPS(options=gpsOptions(position="topleft", 
                                    activate=TRUE, autoCenter=TRUE, maxZoom=16, setView=TRUE)) %>% 
