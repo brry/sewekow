@@ -21,7 +21,7 @@ popup <- unname(berryFunctions::popleaf(shp2, sel=c("gemarkung", "flur", "flurst
   
 message("Creating map...")
 # create map, add controls:
-rmap <- leaflet() %>% addPolygons(data=shp2, popup=popup, group="Flaechen", fillOpacity=0, weight=1, 
+rmap <- leaflet() %>% addPolygons(data=shp2, popup=popup, group="Flure", fillOpacity=0, weight=1, 
         label=~flurstnr, labelOptions=labelOptions(noHide=T, textOnly=T)) %>% 
   #addLabelOnlyMarkers(data=cent, label=~flurstnr, labelOptions=labelOptions(noHide=T, textOnly=T) ) %>% 
   addSearchOSM(options=searchOptions(autoCollapse=TRUE, minLength=2, hideMarkerOnCollapse=TRUE, zoom=16)) %>% 
@@ -36,8 +36,10 @@ prov <- c(OSM="OpenStreetMap", Sat="Esri.WorldImagery", Topo="OpenTopoMap") # ma
 for(pr in names(prov)) rmap <- rmap %>% addProviderTiles(unname(prov[pr]), group=pr, 
                                                          options=providerTileOptions(maxZoom=20))
 rmap <- rmap %>% addLayersControl(baseGroups=names(prov),
-                                  overlayGroups=c("Flaechen"),
-                                  options=layersControlOptions(collapsed=FALSE))
+                                  overlayGroups=c("Flure"),
+                                  options=layersControlOptions(collapsed=FALSE)) %>% 
+  #hideGroup(c("Flure")) %>% 
+  setView(12.652, 53.248, zoom=15) 
 print(rmap)
 
 # Export:
